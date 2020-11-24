@@ -5,62 +5,42 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jtoty <jtoty@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/02/28 15:16:05 by jtoty             #+#    #+#             */
-/*   Updated: 2019/10/11 15:53:47 by lmartin          ###   ########.fr       */
+/*   Created: 2017/02/28 15:15:43 by jtoty             #+#    #+#             */
+/*   Updated: 2020/11/24 15:55:13 by arpascal         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <unistd.h>
 #include "../../../libft.h"
+#include <unistd.h>
 #include <string.h>
-#include <stdio.h>
-
-void	ft_modify_list_with_d(void *elem)
-{
-	int		len;
-	char		*content;
-
-	len = 0;
-	content = (char *)elem;
-	while (content[len])
-	{
-		content[len++] = 'd';
-	}
-}
 
 void	ft_print_result(t_list *elem)
 {
 	int		len;
 
-	while (elem)
-	{
-		len = 0;
-		while (((char *)elem->content)[len])
-			len++;
-		write(1, elem->content, len);
-		write(1, "\n", 1);
-		elem = elem->next;
-	}
+	len = 0;
+	while (((char *)elem->content)[len])
+		len++;
+	write(1, elem->content, len);
 }
 
-t_list	*ft_lstnewone(void const *content)
+static int	nb_free_done;
+
+void	ft_del(void *content)
+{
+	(void)content;
+	nb_free_done++;
+}
+
+t_list	*ft_lstnewone(void *content)
 {
 	t_list	*elem;
 
 	elem = (t_list *)malloc(sizeof(t_list));
 	if (!elem)
 		return (NULL);
-	if (!content)
-	{
-		elem->content = NULL;
-	}
-	else
-	{
-		if (!(elem->content = malloc(sizeof(*(elem->content)) * sizeof(content))))
-			return (NULL);
-		elem->content = memcpy(elem->content, content, sizeof(content));
-	}
+	elem->content = content;
 	elem->next = NULL;
 	return (elem);
 }
@@ -86,10 +66,33 @@ int main(int argc, const char *argv[])
 	elem->next = elem2;
 	elem2->next = elem3;
 	elem3->next = elem4;
+	nb_free_done = 0;
 	if (atoi(argv[1]) == 1)
 	{
-		ft_lstiter(elem, &ft_modify_list_with_d);
-		ft_print_result(elem);
+		ft_lstclear(&elem3, &ft_del);
+		if (elem)
+			ft_print_result(elem);
+		else
+			write(1, "NULL", 4);
+		write(1, "\n", 1);
+		if (elem2)
+			ft_print_result(elem2);
+		else
+			write(1, "NULL", 4);
+		write(1, "\n", 1);
+		if (elem3)
+			ft_print_result(elem3);
+		else
+			write(1, "NULL", 4);
+		write(1, "\n", 1);
+		if (elem4)
+		{
+			write(1, "nb_free_done = ", 15);
+			nb_free_done += '0';
+			write(1, &nb_free_done, 1);
+		}
+		else
+			write(1, "NULL", 4);
 	}
 	return (0);
 }

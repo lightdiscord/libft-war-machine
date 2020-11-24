@@ -6,7 +6,7 @@
 /*   By: jtoty <jtoty@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/28 15:15:25 by jtoty             #+#    #+#             */
-/*   Updated: 2019/10/09 12:19:39 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/11/24 15:59:09 by arpascal         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,14 @@ void	ft_print_result(t_list *elem)
 	write(1, "\n", 1);
 }
 
-t_list	*ft_lstnewone(void const *content)
+t_list	*ft_lstnewone(void *content)
 {
 	t_list	*elem;
 
 	elem = (t_list *)malloc(sizeof(t_list));
 	if (!elem)
 		return (NULL);
-	if (!content)
-	{
-		elem->content = NULL;
-	}
-	else
-	{
-		if (!(elem->content = malloc(sizeof(*(elem->content)) * sizeof(content))))
-			return (NULL);
-		elem->content = memcpy(elem->content, content, sizeof(content));
-	}
+	elem->content = content;
 	elem->next = NULL;
 	return (elem);
 }

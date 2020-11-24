@@ -6,7 +6,7 @@
 /*   By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 14:26:18 by lmartin           #+#    #+#             */
-/*   Updated: 2019/10/09 14:52:35 by lmartin          ###   ########.fr       */
+/*   Updated: 2020/11/24 15:52:17 by arpascal         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,14 @@
 #include <unistd.h>
 #include <string.h>
 
-t_list	*ft_lstnewone(void const *content)
+t_list	*ft_lstnewone(void *content)
 {
 	t_list	*elem;
 
 	elem = (t_list *)malloc(sizeof(t_list));
 	if (!elem)
 		return (NULL);
-	if (!content)
-	{
-		elem->content = NULL;
-	}
-	else
-	{
-		if (!(elem->content = malloc(sizeof(*(elem->content)) * sizeof(content))))
-			return (NULL);
-		elem->content = memcpy(elem->content, content, sizeof(content));
-	}
+	elem->content = content;
 	elem->next = NULL;
 	return (elem);
 }

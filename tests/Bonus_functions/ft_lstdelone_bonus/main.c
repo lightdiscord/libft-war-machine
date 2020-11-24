@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jtoty <jtoty@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/02/28 15:16:21 by jtoty             #+#    #+#             */
-/*   Updated: 2019/10/18 15:07:58 by dh4rm4           ###   ########.fr       */
+/*   Created: 2017/02/28 15:15:51 by jtoty             #+#    #+#             */
+/*   Updated: 2020/11/24 16:14:07 by arpascal         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,59 +15,28 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 void	ft_print_result(t_list *elem)
 {
-	int		len;
-
-	len = 0;
-	while (((char *)elem->content)[len])
-		len++;
-	write(1, ((char *)elem->content), len);
-	write(1, "\n", 1);
+	printf("%s\n", elem->content);
 }
 
-t_list	*ft_lstnewone(void const *content)
+void	ft_del(void *content)
+{
+	printf("free: %s\n", content);
+}
+
+t_list	*ft_lstnewone(void *content)
 {
 	t_list	*elem;
 
 	elem = (t_list *)malloc(sizeof(t_list));
 	if (!elem)
 		return (NULL);
-	if (!content)
-	{
-		elem->content = NULL;
-	}
-	else
-	{
-		if (!(elem->content = malloc(sizeof(*(elem->content)) * sizeof(elem->content))))
-			return (NULL);
-		elem->content = memcpy(elem->content, content, sizeof(elem->content));
-	}
+	elem->content = content;
 	elem->next = NULL;
 	return (elem);
-}
-
-void	*ft_map(void *ct)
-{
-	int i;
-	void	*c;
-	char	*pouet;
-
-	if (!(c = malloc(sizeof(*(c)) * sizeof(c))))
-		return (NULL);
-	c = memcpy(c, ct, sizeof(c));
-	i = -1;
-	pouet = (char *)c;
-	while (pouet[++i])
-		if (pouet[i] == 'o')
-			pouet[i] = 'a';
-	return (c);
-}
-
-void    ft_del(void *content)
-{
-	free(content);
 }
 
 int main(int argc, const char *argv[])
@@ -76,10 +45,9 @@ int main(int argc, const char *argv[])
 	t_list		*elem2;
 	t_list		*elem3;
 	t_list		*elem4;
-	t_list		*list;
 	char		str [] = "lorem";
 	char		str2 [] = "ipsum";
-	char		str3 [] = "dalar";
+	char		str3 [] = "dolor";
 	char		str4 [] = "sit";
 
 	elem = ft_lstnewone(str);
@@ -94,19 +62,10 @@ int main(int argc, const char *argv[])
 	elem3->next = elem4;
 	if (atoi(argv[1]) == 1)
 	{
-		if (!(list = ft_lstmap(elem, &ft_map, &ft_del)))
-			return (0);
-		if (list == elem)
-			write(1, "A new list is not returned\n", 27);
-		int i;
-		i = 0;
-		ft_print_result(list);
-		while (list->next)
-		{
-			list = list->next;
-			ft_print_result(list);
-			i++;
-		}
+		ft_lstdelone(elem3, &ft_del);
+		ft_print_result(elem);
+		ft_print_result(elem2);
+		ft_print_result(elem4);
 	}
 	return (0);
 }
